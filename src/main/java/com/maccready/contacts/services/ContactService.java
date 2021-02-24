@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ContactService {
     List<Contact> getAll();
+
+    Long save(Contact contact);
 }

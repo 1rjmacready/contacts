@@ -22,4 +22,9 @@ public class DatabaseContactService implements ContactService{
                 new Contact(record.getFirstName(), record.getLastName(),
                         record.getEmail(), record.getPhone())).collect(Collectors.toList());
     }
+
+    @Override
+    public Long save(Contact contactToSave) {
+        return null;
+    }
 }
