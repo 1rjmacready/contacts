@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequestMapping("/contacts")
 public class ContactController {
-    private ContactService service;
+    private final ContactService service;
 
     public ContactController(ContactService service) {
         this.service = service;
