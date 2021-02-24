@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,11 +36,17 @@ class DatabaseContactServiceTest {
     void save() {
         ContactRepository repository = mock(ContactRepository.class);
         Long expectedId = 134134L;
-        ContactRecord record = new ContactRecord("Biff", "Jones", "biff@xyx.com", "5435435432");
-        ReflectionTestUtils.setField(record, "id", expectedId);
-        when(repository.save(any(ContactRecord.class))).thenReturn(record);
+        ContactRecord expectedContractRecord = new ContactRecord();
+        ReflectionTestUtils.setField(expectedContractRecord, "id", expectedId);
+        when(repository.save(argThat(contactRecord -> {
+            assertEquals("Biff", contactRecord.getFirstName());
+            assertEquals("Jones", contactRecord.getLastName());
+            assertEquals("biff@xyx.com", contactRecord.getEmail());
+            assertEquals("5435435432", contactRecord.getPhone());
+            return true;
+        }))).thenReturn(expectedContractRecord);
         DatabaseContactService service = new DatabaseContactService(repository);
-        Long id = service.save(new Contact());
+        Long id = service.save(new Contact("Biff", "Jones", "biff@xyx.com", "5435435432"));
         assertEquals(expectedId, id);
     }
 }
