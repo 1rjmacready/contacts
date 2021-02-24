@@ -1,5 +1,6 @@
 package com.maccready.contacts.services;
 
+import com.maccready.contacts.entities.ContactRecord;
 import com.maccready.contacts.models.Contact;
 import com.maccready.contacts.repositories.ContactRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class DatabaseContactService implements ContactService{
 
     @Override
     public Long save(Contact contactToSave) {
-        return null;
+        ContactRecord record = new ContactRecord(contactToSave.getFirstName(), contactToSave.getLastName(),
+                contactToSave.getEmail(), contactToSave.getPhone());
+        return repository.save(record).getId();
     }
 }
