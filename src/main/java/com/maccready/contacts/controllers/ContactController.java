@@ -5,6 +5,7 @@ import com.maccready.contacts.services.ContactService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ContactController {
         return service.getAll();
     }
     @PostMapping
-    public ResponseEntity<Contact> saveContact(@RequestBody Contact contact) throws URISyntaxException {
+    public ResponseEntity<Contact> saveContact(@RequestBody @Valid Contact contact) throws URISyntaxException {
         Long id = service.save(contact);
         return ResponseEntity.created(new URI("/persons/" + id)).body(contact);
     }
