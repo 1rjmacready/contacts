@@ -6,6 +6,7 @@ import com.maccready.contacts.repositories.ContactRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,9 +26,23 @@ public class DatabaseContactService implements ContactService{
     }
 
     @Override
+    public Optional<Contact> get(long id) {
+        return repository.findById(id).map(record -> new Contact(record.getFirstName(), record.getLastName(),
+                record.getEmail(), record.getPhone()));
+    }
+
+    @Override
     public Long save(Contact contactToSave) {
         ContactRecord record = new ContactRecord(contactToSave.getFirstName(), contactToSave.getLastName(),
                 contactToSave.getEmail(), contactToSave.getPhone());
         return repository.save(record).getId();
+    }
+
+    @Override
+    public boolean delete(long id) {
+        return repository.findById(id).map(record -> {
+            repository.delete(record);
+            return true;
+        }).orElse(false);
     }
 }
