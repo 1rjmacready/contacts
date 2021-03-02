@@ -27,3 +27,24 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+configurations {
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntime.extendsFrom runtimeOnly
+}
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += sourceSets.main.output
+			runtimeClasspath += sourceSets.main.output
+			srcDir file('src/integrationTest/java')
+		}
+		resources.srcDir file('src/integrationTest/resources')
+	}
+}
+task integrationTest(type: Test) {
+	description = 'Runs integration tests.'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+check.dependsOn integrationTest
