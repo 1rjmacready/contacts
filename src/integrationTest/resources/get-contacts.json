@@ -1,0 +1,26 @@
+[
+  {
+    "firstName": "RJ",
+    "lastName": "MacReady",
+    "email": "rjmacready@xyz.com",
+    "phone": "5551234567"
+  },
+  {
+    "firstName": "Ellen",
+    "lastName": "Ripley",
+    "email": "eripley@xyz.com",
+    "phone": "5551239874"
+  },
+  {
+    "firstName": "Rita",
+    "lastName": "Vrataski",
+    "email": "rvrataski@xyz.com",
+    "phone": "5551233216"
+  },
+  {
+    "firstName": "Jack",
+    "lastName": "Bauer",
+    "email": "jbauer@xyz.com",
+    "phone": "5551239541"
+  }
+]
