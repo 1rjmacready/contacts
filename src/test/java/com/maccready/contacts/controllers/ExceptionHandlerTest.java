@@ -1,6 +1,7 @@
 package com.maccready.contacts.controllers;
 
 import com.maccready.contacts.models.ExceptionResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,22 +12,29 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExceptionHandlerTest {
 
-    @Test
-    void handleMethodArgumentNotValid() {
-        final Date currentDate = new Date();
+    private Date currentDate;
+    private ExceptionHandler exceptionHandler;
 
-
-        ExceptionHandler exceptionHandler = new ExceptionHandler(){
+    @BeforeEach
+    void setUp() {
+        currentDate = new Date();
+        exceptionHandler = new ExceptionHandler(){
             @Override
             protected Date getCurrentDate() {
                 return currentDate;
             }
         };
+    }
+
+    @Test
+    void handleMethodArgumentNotValid() {
+
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(null, "arbitrary"){
             @Override
             public List<ObjectError> getAllErrors() {
@@ -38,7 +46,16 @@ class ExceptionHandlerTest {
         ResponseEntity<Object> result = exceptionHandler.handleMethodArgumentNotValid(exception, null, null, null);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         ExceptionResponse response = (ExceptionResponse) result.getBody();
-        assertSame(currentDate, response.getDate());
-        assertEquals("First name is invalid, Email is invalid", response.getErrors());
+        assertSame(currentDate, Objects.requireNonNull(response).getDate());
+        assertArrayEquals(new String[]{"First name is invalid", "Email is invalid"}, response.getErrors().toArray());
+    }
+
+    @Test
+    void handleAllExceptions() {
+        ResponseEntity<ExceptionResponse> result =
+                exceptionHandler.handleAllExceptions(new RuntimeException("Epic Fail"));
+        ExceptionResponse body = result.getBody();
+        assertArrayEquals(new String[]{"Epic Fail"}, Objects.requireNonNull(body).getErrors().toArray());
+        assertSame(currentDate,body.getDate());
     }
 }
