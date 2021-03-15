@@ -3,11 +3,13 @@ package com.maccready.contacts.controllers;
 import com.maccready.contacts.models.ExceptionResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class ExceptionHandlerTest {
 
@@ -32,6 +35,7 @@ class ExceptionHandlerTest {
         };
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void handleMethodArgumentNotValid() {
 
@@ -43,7 +47,7 @@ class ExceptionHandlerTest {
             }
         };
         MethodArgumentNotValidException exception = new MethodArgumentNotValidException(null, bindingResult);
-        ResponseEntity<Object> result = exceptionHandler.handleMethodArgumentNotValid(exception, null, null, null);
+        ResponseEntity<Object> result = exceptionHandler.handleMethodArgumentNotValid(exception, mock(HttpHeaders.class), HttpStatus.BAD_REQUEST, mock(WebRequest.class));
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         ExceptionResponse response = (ExceptionResponse) result.getBody();
         assertSame(currentDate, Objects.requireNonNull(response).getDate());
