@@ -11,7 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/wageearners")
 public class EmployeeController {
     private final RestTemplate restTemplate;
 
