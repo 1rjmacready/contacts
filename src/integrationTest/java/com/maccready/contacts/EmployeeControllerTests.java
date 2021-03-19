@@ -28,7 +28,6 @@ public class EmployeeControllerTests {
     public void setup () {
         FileSource fileSource = new SingleRootFileSource("src/integrationTest/resources");
         wireMockServer = new WireMockServer(8090, fileSource,false);
-
         wireMockServer.start();
         setupStub();
     }
@@ -41,8 +40,7 @@ public class EmployeeControllerTests {
     public void setupStub() {
         wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/employees"))
                 .willReturn(aResponse().withHeader("Content-Type", "application/json")
-                        .withStatus(200)
-                        .withBodyFile("body-api-v1-employees-2tOQL.json")));
+                .withStatus(200).withBodyFile("body-api-v1-employees-2tOQL.json")));
     }
 
     @Test
