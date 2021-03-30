@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -70,7 +71,13 @@ class ContactControllerTest {
 
     @Test
     void saveContact() throws URISyntaxException {
-        when(contactService.save(expectedContact)).thenReturn(324L);
+        when(contactService.save(argThat(contact -> {
+            assertEquals("RJ",contact.getFirstName());
+            assertEquals("MacReady",contact.getLastName());
+            assertEquals("ajolie@xyx.com",contact.getEmail());
+
+            return true;
+        }))).thenReturn(324L);
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getRequestURL()).thenReturn(new StringBuffer("http://mydomain.com/persons"));
         ResponseEntity<Contact> result = controller.saveContact(expectedContact, request);
